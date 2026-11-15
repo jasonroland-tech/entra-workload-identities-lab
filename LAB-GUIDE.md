@@ -5,6 +5,18 @@
 
 Uses the Lakeview tenant and subscription. Run Part 1 on DC01 (start it, then stop it after). 📸 = screenshot. Redact IDs.
 
+## Before you start
+
+**Accounts**
+- [ ] **Lakeview Health tenant and Azure subscription** (Global Admin), with `rg-lakeview-dev` from the RBAC lab.
+
+**Machines and software**
+- [ ] **DC01** started in the Azure portal, and you can RDP to it (your NSG already allows only your IP).
+- [ ] **PowerShell 5.1 or 7** on DC01 (built in). The script installs the `Microsoft.Graph.Users` module the first time; if asked to trust PSGallery, answer **Y**.
+- Key Vault and the Automation account are created in the portal, no install.
+
+Stop DC01 when you finish so it doesn't keep billing.
+
 ## Part 1: App registration with a certificate (20 min)
 
 **1. Register the app.** Entra admin > App registrations > New registration > name `app-lakeview-user-report`, single tenant > Register. Note the **Application (client) ID** and **Directory (tenant) ID**.
