@@ -2,7 +2,7 @@
 
 > **Loom walkthrough:** _link coming soon_
 
-Lab 7 of the Lakeview Health series. People are not the only identities in the cloud. I secured two kinds of non-human identity: an app registration that signs in with a certificate and holds one read permission, and a managed identity that reads a Key Vault secret with no credential at all. Then I locked down who can consent to apps.
+Lab 8 of the Lakeview Health series. People are not the only identities in the cloud. I secured two kinds of non-human identity: an app registration that signs in with a certificate and holds one read permission, and a managed identity that reads a Key Vault secret with no credential at all. Then I locked down who can consent to apps.
 
 ## What this proves
 

@@ -1,11 +1,11 @@
 # Lab guide: Entra workload identities (apps, consent, managed identity, Key Vault)
 
-**Time:** about 75 minutes. **Cost:** a few cents at most (Key Vault operations; Automation has free minutes).
+**Time:** 40 to 45 min. **Cost:** a few cents at most (Key Vault operations; Automation has free minutes).
 **Why this lab:** Cloud IAM posts from Applied Materials, BlackRock and Regions ask for service principals, app registrations and managed identities by name. These are the non-human identities that outnumber people in the cloud.
 
 Uses the Lakeview tenant and subscription. Run Part 1 on DC01 (start it, then stop it after). 📸 = screenshot. Redact IDs.
 
-## Part 1: App registration with a certificate (30 min)
+## Part 1: App registration with a certificate (20 min)
 
 **1. Register the app.** Entra admin > App registrations > New registration > name `app-lakeview-user-report`, single tenant > Register. Note the **Application (client) ID** and **Directory (tenant) ID**.
 
@@ -27,7 +27,7 @@ Upload `app-lakeview.cer`: app > Certificates & secrets > Certificates > Upload.
 ```
 It lists users, then tries to create one and is blocked. 📸 the green "write blocked" line.
 
-## Part 2: Managed identity reading Key Vault (30 min)
+## Part 2: Managed identity reading Key Vault (15 min)
 
 **5. Create a Key Vault.** Portal > Key vaults > Create > `kv-lakeview-lab` (must be globally unique, add digits) in `rg-lakeview-dev` > Access configuration: **Azure role based access control**. Give yourself **Key Vault Secrets Officer** on the vault, then add a secret `demo-api-key` with any value.
 
@@ -38,11 +38,9 @@ It lists users, then tries to create one and is blocked. 📸 the green "write b
 
 **8. Run the runbook.** Automation account > Runbooks > Create > PowerShell, runtime 7.2 > paste [`runbooks/Get-SecretWithManagedIdentity.ps1`](runbooks/Get-SecretWithManagedIdentity.ps1) (fix the vault name) > Publish > Start. Output shows the secret was read, without printing it. 📸
 
-## Part 3: Govern app access (15 min)
+## Part 3: Govern app consent (5 min)
 
 **9. Stop users consenting to random apps.** Enterprise applications > Consent and permissions > User consent settings > **Do not allow user consent**. Then Admin consent settings > **Users can request admin consent: Yes** > reviewer: you. 📸
 *Why:* illicit consent grants are a common way attackers take over accounts.
 
-**10. Inventory.** Enterprise applications > filter Application type: **Managed identities**, then **All applications**. Check `app-lakeview-user-report` > Permissions. Note in the README which apps have application permissions and who owns them.
-
-**11. Clean up.** Delete `aa-lakeview` and the Key Vault, and stop DC01. Keep the app registration for screenshots, then delete it or set its certificate to expire.
+**10. Clean up.** Delete `aa-lakeview` and the Key Vault, and stop DC01. Keep the app registration for screenshots, then delete it or set its certificate to expire.
