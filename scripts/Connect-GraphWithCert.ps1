@@ -22,18 +22,22 @@ Connect-MgGraph -TenantId $TenantId -ClientId $ClientId -CertificateThumbprint $
 $ctx = Get-MgContext
 Write-Host "Signed in as app: $($ctx.AppName). Auth type: $($ctx.AuthType). Scopes: $($ctx.Scopes -join ', ')"
 
-Get-MgUser -Top 10 -Property DisplayName, UserPrincipalName, AccountEnabled |
-    Select-Object DisplayName, UserPrincipalName, AccountEnabled |
-    Format-Table -AutoSize
+$users = Get-MgUser -Top 10 -Property DisplayName, UserPrincipalName, AccountEnabled
+$users | Select-Object DisplayName, UserPrincipalName, AccountEnabled | Format-Table -AutoSize
 
-# This should FAIL: the app only has User.Read.All, so it cannot create users.
+# This should FAIL with 403: the app only has User.Read.All, so it cannot create users.
+$domain = ($users[0].UserPrincipalName -split '@')[1]
 try {
     New-MgUser -DisplayName "Should Fail" -MailNickname "shouldfail" -AccountEnabled:$false `
-        -UserPrincipalName "shouldfail@$((Get-MgOrganization).VerifiedDomains[0].Name)" `
+        -UserPrincipalName "shouldfail@$domain" `
         -PasswordProfile @{ Password = [guid]::NewGuid().ToString() + "Aa1!" } -ErrorAction Stop
     Write-Warning "Unexpected: the app was able to create a user. Check its permissions."
 } catch {
-    Write-Host "Expected: write blocked. Least privilege works." -ForegroundColor Green
+    if ($_.Exception.Message -match 'Authorization_RequestDenied|Insufficient privileges|403') {
+        Write-Host "Expected: write blocked (403). Least privilege works." -ForegroundColor Green
+    } else {
+        Write-Warning "Create failed for a different reason: $($_.Exception.Message)"
+    }
 }
 
 Disconnect-MgGraph | Out-Null
