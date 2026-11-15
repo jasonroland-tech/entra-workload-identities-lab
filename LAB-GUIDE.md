@@ -48,7 +48,7 @@ It lists users, then tries to create one and is blocked. 📸 the green "write b
 **7. Grant the identity, not a person.** Key vault > Access control (IAM) > Add role assignment > **Key Vault Secrets User** > Assign access to **Managed identity** > `aa-lakeview`. 📸
 *Why:* the identity can read secrets in this one vault and nothing else.
 
-**8. Run the runbook.** Automation account > Runbooks > Create > PowerShell, runtime 7.2 > paste [`runbooks/Get-SecretWithManagedIdentity.ps1`](runbooks/Get-SecretWithManagedIdentity.ps1) (fix the vault name) > Publish > Start. Output shows the secret was read, without printing it. 📸
+**8. Run the runbook.** Automation account > Runbooks > Create > PowerShell, newest runtime offered (7.4 or later) > paste [`runbooks/Get-SecretWithManagedIdentity.ps1`](runbooks/Get-SecretWithManagedIdentity.ps1) (fix the vault name) > Publish > Start. Output shows the secret was read, without printing it. 📸
 
 ## Part 3: Govern app consent (5 min)
 

@@ -1,4 +1,4 @@
-# Azure Automation runbook (PowerShell 7.2 runtime).
+# Azure Automation runbook (PowerShell 7.4 or later runtime).
 # Reads a Key Vault secret using the Automation account's system assigned managed identity.
 # There is no credential anywhere in this script: Azure issues the token to the identity.
 
